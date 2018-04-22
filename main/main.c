@@ -11,7 +11,25 @@
 #include "freertos/task.h"
 #include "esp_system.h"
 #include "esp_spi_flash.h"
+//for DHT11
+#include "rom/ets_sys.h"
+#include "nvs_flash.h"
+#include "driver/gpio.h"
+#include "sdkconfig.h"
+#include "dht11.h"
 
+void DHT_task(void *pvParameter)
+{
+   setDHTPin(4);
+   printf("Starting DHT measurement!\n");
+   while(1)
+   {
+    printf("Temperature reading %d\n",getTemp());
+    vTaskDelay(300 / portTICK_RATE_MS);
+    printf("Humidity reading %d\n",getHumidity());
+    vTaskDelay(3000 / portTICK_RATE_MS);
+   }
+}
 
 void app_main()
 {
@@ -30,11 +48,8 @@ void app_main()
     printf("%dMB %s flash\n", spi_flash_get_chip_size() / (1024 * 1024),
             (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
 
-    for (int i = 10; i >= 0; i--) {
-        printf("Restarting in %d seconds...\n", i);
-        vTaskDelay(1000 / portTICK_PERIOD_MS);
-    }
-    printf("Restarting now.\n");
-    fflush(stdout);
-    esp_restart();
+    printf("Starting task DHT11...");
+    vTaskDelay(1000 / portTICK_RATE_MS);
+    xTaskCreate(&DHT_task, "DHT_task", 2048, NULL, 5, NULL);
+
 }
