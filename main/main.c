@@ -15,13 +15,20 @@
 
 void DHT_task(void *pvParameter)
 {
-   printf("Starting DHT measurement!\n");
+   printf("Starting DHT measurement...");
+   //Configuration the DHT sensor to pin 4
    struct DHT11_t temp;
    temp.PIN = 4;
+
+   int response;
+   printf("DONE\n");
    while(1)
    {
-    printf("Temperature reading status: %d\n",getData(&temp));
-    printf("Temperature= %dºC   Humidity= %d\n", temp.temperature, temp.humidity);
+     if ((response = getData(&temp))==DHT_OK){
+       printf("Temperature= %dºC   Humidity= %d\n", temp.temperature, temp.humidity);
+     } else {
+       DHT_errorHandle(response);
+     }
     vTaskDelay(3000 / portTICK_RATE_MS);
    }
 }
@@ -43,7 +50,6 @@ void app_main()
     printf("%dMB %s flash\n", spi_flash_get_chip_size() / (1024 * 1024),
             (chip_info.features & CHIP_FEATURE_EMB_FLASH) ? "embedded" : "external");
 
-    printf("Starting task DHT11...");
     vTaskDelay(1000 / portTICK_RATE_MS);
     xTaskCreate(&DHT_task, "DHT_task", 2048, NULL, 5, NULL);
 
