@@ -11,29 +11,24 @@
 #include "freertos/task.h"
 #include "esp_system.h"
 #include "esp_spi_flash.h"
-//for DHT11
-#include "rom/ets_sys.h"
-#include "nvs_flash.h"
-#include "driver/gpio.h"
-#include "sdkconfig.h"
-#include "dht11.h"
+#include "dht11.h" //library for DHT11
 
 void DHT_task(void *pvParameter)
 {
-   setDHTPin(4);
    printf("Starting DHT measurement!\n");
+   struct DHT11_t temp;
+   temp.PIN = 4;
    while(1)
    {
-    printf("Temperature reading %d\n",getTemp());
-    vTaskDelay(300 / portTICK_RATE_MS);
-    printf("Humidity reading %d\n",getHumidity());
+    printf("Temperature reading status: %d\n",getData(&temp));
+    printf("Temperature= %dºC   Humidity= %d\n", temp.temperature, temp.humidity);
     vTaskDelay(3000 / portTICK_RATE_MS);
    }
 }
 
 void app_main()
 {
-    printf("ESP32temp\n");
+    printf("ESP32temp project\n");
 
     /* Print chip information */
     esp_chip_info_t chip_info;
