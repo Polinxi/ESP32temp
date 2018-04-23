@@ -5,7 +5,7 @@
 		  3. Check the returnad value if is ecual to DHT_OK you can get the
 			values (temperature and humidity) from the structure.
 			E. In case of error you can chech the error with DHT_errorHandle()
-   Pol Paradell 
+   Pol Paradell
    April 2018
    This example code is in the Public Domain (or CC0 licensed, at your option.)
    Unless required by applicable law or agreed to in writing, this
