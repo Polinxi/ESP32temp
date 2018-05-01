@@ -15,6 +15,8 @@
 #ifndef WIFIC_H_
 #define WIFIC_H_
 
+extern const char *TAG;
+
 #include <string.h>
 #include <stdlib.h>
 #include <sys/time.h>
