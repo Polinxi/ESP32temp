@@ -9,9 +9,9 @@
 /* The event group allows multiple bits for each event,
    but we only care about one event - are we connected
    to the AP with an IP? */
-const int CONNECTED_BIT = BIT0;
+int CONNECTED_BIT = BIT0;
 
-static const char *TAG = "simple wifi";
+static const char *TAG = "Wifi";
 
 esp_err_t event_handler(void *ctx, system_event_t *event)
 {
@@ -36,7 +36,7 @@ esp_err_t event_handler(void *ctx, system_event_t *event)
     return ESP_OK;
 }
 
-void initialise_wifi(void)
+int* initialise_wifi(void)
 {
     tcpip_adapter_init();
     wifi_event_group = xEventGroupCreate();
@@ -54,4 +54,5 @@ void initialise_wifi(void)
     ESP_ERROR_CHECK( esp_wifi_set_mode(WIFI_MODE_STA) );
     ESP_ERROR_CHECK( esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config) );
     ESP_ERROR_CHECK( esp_wifi_start() );
+    return &CONNECTED_BIT;
 }
