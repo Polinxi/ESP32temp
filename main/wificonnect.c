@@ -54,5 +54,9 @@ int* initialise_wifi(void)
     ESP_ERROR_CHECK( esp_wifi_set_mode(WIFI_MODE_STA) );
     ESP_ERROR_CHECK( esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config) );
     ESP_ERROR_CHECK( esp_wifi_start() );
+
+    vTaskDelay(3000 / portTICK_PERIOD_MS);
+    // Wait for the callback to set the CONNECTED_BIT in the event group.
+    xEventGroupWaitBits(wifi_event_group, CONNECTED_BIT, false, true, portMAX_DELAY);
     return &CONNECTED_BIT;
 }

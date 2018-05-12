@@ -11,14 +11,19 @@
 #include "freertos/task.h"
 #include "esp_system.h"
 #include "esp_spi_flash.h"
+#include "esp_wifi.h"
+#include "esp_event_loop.h"
 
 #include "wificonnect.h"
+#include "http_post.h"
+
+/* FreeRTOS event group to signal when we are connected & ready to make a request */
+// EventGroupHandle_t w ifi_event_group;
 
 static const char *TAG = "ESP32_1";
 
-void app_main()
-{
-    ESP_LOGI(TAG, "Starting the project og ESP tmemperature"
+void app_main(){
+    ESP_LOGI(TAG, "Starting the project ESP tmemperature");
 
     /* Print chip information */
     esp_chip_info_t chip_info;
@@ -36,4 +41,5 @@ void app_main()
     ESP_ERROR_CHECK( nvs_flash_init() ); //Check if there are any error
     int* stauts = initialise_wifi(); //connect to the wifi
 
+    http_post_send(TAG, "temperature",30.23);//Send the information
 }
