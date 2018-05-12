@@ -30,7 +30,7 @@ extern const char *TAG;
 #include "esp_system.h"
 #include "nvs_flash.h"
 
-//#include "sh2lib.h"
+#include "sh2lib.h"
 
 /* The examples use simple WiFi configuration that you can set via
    'make menuconfig'.

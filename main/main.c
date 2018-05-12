@@ -17,6 +17,9 @@ const char *TAG = "ESP32_1"; //Ientifier
 
 #include "wificonnect.h"
 
+/* The HTTP/2 server to connect to */
+#define HTTP2_SERVER_URI  "http://192.168.22.30:8086"
+
 void app_main()
 {
 
@@ -37,4 +40,17 @@ void app_main()
     ESP_ERROR_CHECK( nvs_flash_init() ); //Check if there are any error
 
     initialise_wifi(); //connect to the wifi
+
+    /* Waiting for connection */
+    xEventGroupWaitBits(wifi_event_group, CONNECTED_BIT,false, true, portMAX_DELAY);
+
+    /* HTTP2: one connection multiple requests. Do the TLS/TCP connection first */
+    printf("Connecting to server\n");
+    struct sh2lib_handle hd;
+    if (sh2lib_connect(&hd, HTTP2_SERVER_URI) != 0) {
+        printf("Failed to connect\n");
+        return;
+    }
+    printf("Connection done\n");
+
 }

@@ -1,0 +1,2 @@
+Command to insert data to influxDB 
+curl -i -XPOST 'http://192.168.22.30:8086/write?db=casa' --data-binary 'temperature,machine=test value=11'
